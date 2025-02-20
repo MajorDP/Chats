@@ -14,7 +14,6 @@ function FriendList() {
     status: "Feeling strong rn",
   };
 
-  console.log(currentUser.id);
   const mockFriendsData = [
     {
       id: "f1",
@@ -41,8 +40,11 @@ function FriendList() {
       <div className="w-[15rem] m-auto h-fit bg-gradient-to-b from-gray-700 to-slate-800 rounded-xl border border-slate-500 mt-2">
         <h2 className="text-center py-4 font-semilight">Friends</h2>
         <ul>
-          {mockFriendsData.map((friend) => (
-            <li className="flex flex-row justify-around p-2 mb-2 gap-1">
+          {mockFriendsData.map((friend, index) => (
+            <li
+              className="flex flex-row justify-around p-2 mb-2 gap-1"
+              key={index}
+            >
               <div className="w-[20%]">
                 <img src={friend.img} className="w-full rounded-full" />
               </div>

@@ -4,6 +4,7 @@ import AppLayout from "./components/AppLayout";
 import Explore from "./pages/Explore";
 import Account from "./pages/Account";
 import Auth from "./pages/Auth";
+import PostPage from "./pages/Post";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/user" element={<Account />} />
+          <Route path="/post/:pid" element={<PostPage />} />
         </Route>
         <Route path="/auth" element={<Auth />} />
       </Routes>
