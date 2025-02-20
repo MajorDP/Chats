@@ -2,6 +2,7 @@ import { useState } from "react";
 import { IPosts } from "../interfaces/posts";
 import { Link } from "react-router-dom";
 import CommentForm from "./CommentForm";
+import Comments from "./Comments";
 
 interface IPostItem {
   post: IPosts;
@@ -59,29 +60,11 @@ function Post({ post }: IPostItem) {
       </div>
       <div
         className={`overflow-hidden transition-all duration-300 w-full mt-4 ${
-          showComments ? "max-h-[500px]" : "max-h-0"
+          showComments ? "h-[30rem]" : "h-0"
         }`}
       >
         <CommentForm />
-        <ul className="flex flex-col gap-5">
-          {post.comments.slice(0, 4).map((comment, index) => (
-            <li className="flex flex-row gap-2" key={index}>
-              <div className="w-[10%] sm:w-[8%]">
-                <img src={comment.userImg} className="w-full rounded-full" />
-              </div>
-
-              <div className="flex gap-2 flex-col text-sm w-[40%]">
-                <div className="flex flex-row gap-2">
-                  <p className="truncate text-xs">{comment.username}</p>
-                  <p className="text-[12px] truncate text-gray-400">
-                    {comment.datePosted}
-                  </p>
-                </div>
-                <p className="text-xs">{comment.comment}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <Comments showAll={false} comments={post.comments} />
         <div className="w-full mt-5 flex justify-center underline">
           <Link to={`/post/${post.id}`} className="text-xs text-center">
             See All Comments ({post.comments.length})

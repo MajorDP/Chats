@@ -1,4 +1,5 @@
 import CommentForm from "../components/CommentForm";
+import Comments from "../components/Comments";
 import { IPosts } from "../interfaces/posts";
 
 function PostPage() {
@@ -14,6 +15,34 @@ function PostPage() {
     comments: [
       {
         userId: "1",
+        username: "aaAsura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment:
+          "Amazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
         username: "Asura",
         datePosted: "20.02.2025",
         userImg:
@@ -46,6 +75,69 @@ function PostPage() {
         userImg:
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
         comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing post",
+        likes: 0,
+      },
+      {
+        userId: "1",
+        username: "Asura",
+        datePosted: "20.02.2025",
+        userImg:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
+        comment: "Amazing postAmazing post",
         likes: 0,
       },
       {
@@ -130,30 +222,8 @@ function PostPage() {
               </button>
             </div>
           </div>
-          <div className="overflow-hidden transition-all duration-300 w-full">
-            <ul className="flex flex-col gap-5 border border-slate-500 rounded-xl p-2 mt-10 sm:mt-0  bg-gradient-to-b from-gray-700 to-slate-800 h-[20rem] lg:h-[28rem] overflow-y-scroll">
-              <h2 className="text-center">Comments</h2>
-              {post.comments.map((comment, index) => (
-                <li className="flex flex-row gap-2" key={index}>
-                  <div className="w-[10%] sm:w-[8%]">
-                    <img
-                      src={comment.userImg}
-                      className="w-full rounded-full"
-                    />
-                  </div>
-
-                  <div className="flex gap-2 flex-col text-sm w-full sm:w-[40%]">
-                    <div className="flex flex-row gap-2">
-                      <p className="truncate text-xs">{comment.username}</p>
-                      <p className="text-[12px] truncate text-gray-400">
-                        {comment.datePosted}
-                      </p>
-                    </div>
-                    <p className="text-xs">{comment.comment}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+          <div className="overflow-hidden transition-all duration-300 w-full h-full">
+            <Comments showAll={true} comments={post.comments} />
             <CommentForm />
           </div>
         </div>
