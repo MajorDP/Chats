@@ -1,183 +1,45 @@
+import { useParams } from "react-router-dom";
 import CommentForm from "../components/CommentForm";
 import Comments from "../components/Comments";
 import { IPosts } from "../interfaces/posts";
+import { useEffect, useState } from "react";
+import { updateVote } from "../services/posts-services";
+import Spinner from "../components/Spinner";
 
 function PostPage() {
-  const post: IPosts = {
-    id: "p1",
-    datePosted: "19.02.2025",
-    username: "Asura",
-    userImg:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-    message: "This shit so ass",
-    img: "https://preview.redd.it/this-shit-is-so-ass-v0-33ef927zzngd1.jpeg?width=1080&crop=smart&auto=webp&s=33c6fd685d73fa6ba4bc9dda21c60c12a3938c1d",
-    likes: 254,
-    comments: [
-      {
-        userId: "1",
-        username: "aaAsura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment:
-          "Amazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing postAmazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-    ],
+  const { pid } = useParams();
+
+  const [error, setError] = useState<string | null>(null);
+  const [post, setPost] = useState<IPosts | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const getPost = async () => {
+      const res = await fetch(`http://localhost:5000/posts/${pid}`);
+      const data = await res.json();
+      setPost(data);
+      setIsLoading(false);
+    };
+    getPost();
+  }, [pid]);
+
+  const handleVote = async (voteType: string) => {
+    const { data, error } = await updateVote(pid, voteType);
+    if (error) {
+      setError(error.message);
+    } else {
+      setPost(data);
+      setError(null);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="m-auto">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full overflow-hidden flex flex-row rounded-xl mb-16">
       <div className="w-full md:w-full mt-5 ml-5 flex items-center">
@@ -186,13 +48,13 @@ function PostPage() {
           <div className="w-full">
             <div className="flex flex-row w-full p-2">
               <div className="w-[25%] md:max-w-[15%] xl:max-w-[15%]">
-                <img src={post.userImg} className="rounded-full w-fit" />
+                <img src={post?.userImg} className="rounded-full w-fit" />
               </div>
               <div className="flex flex-col justify-start ml-2 w-[75%] xl:max-w-[85%]">
-                <p className="text-lg">{post.username}</p>
-                <p className="text-sm text-gray-400">{post.datePosted}</p>
+                <p className="text-lg">{post?.username}</p>
+                <p className="text-sm text-gray-400">{post?.datePosted}</p>
                 <div className="hidden sm:flex flex-col w-full">
-                  <p className="break-words w-full my-2">{post.message}</p>
+                  <p className="break-words w-full my-2">{post?.message}</p>
                   <div className="max-w-[20rem] lg:max-w-[30rem] xl:max-w-[40rem] flex items-start justify-start">
                     <img
                       src={post?.img}
@@ -204,27 +66,36 @@ function PostPage() {
             </div>
             <div className="sm:hidden flex flex-col items-center w-full mt-2">
               <p className="break-words w-full ml-10 my-[0.4rem]">
-                {post.message}
+                {post?.message}
               </p>
               <div className="max-w-[30rem] flex items-center justify-center">
                 <img src={post?.img} className="w-full h-full object-contain" />
               </div>
             </div>
+            {error && (
+              <p className="text-center text-xs text-red-500">{error}</p>
+            )}
             <div className="flex flex-row gap-4 text-xs mt-1 m-auto w-fit">
-              <button className="bg-white hover:bg-green-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer">
+              <button
+                className="bg-white hover:bg-green-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+                onClick={() => handleVote("like")}
+              >
                 👍
               </button>
               <p>
-                {post.likes} {post.likes === 1 ? "Like" : "Likes"}
+                {post?.likes} {post?.likes === 1 ? "Like" : "Likes"}
               </p>
-              <button className="bg-white hover:bg-red-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer">
+              <button
+                className="bg-white hover:bg-red-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+                onClick={() => handleVote("dislike")}
+              >
                 👎
               </button>
             </div>
           </div>
           <div className="overflow-hidden transition-all duration-300 w-full h-full">
-            <Comments showAll={true} comments={post.comments} />
-            <CommentForm />
+            <Comments showAll={true} comments={post?.comments || []} />
+            <CommentForm pid={pid as string} setPost={setPost} />
           </div>
         </div>
       </div>

@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { Home, Compass, User, LogOut } from "lucide-react";
+import { useContext } from "react";
+import { AuthContext } from "../context/UserContext";
 
 function Navigation() {
+  const { logout } = useContext(AuthContext);
   const mockUser = {
     id: "1",
     email: "asura@abv.bg",
@@ -14,7 +17,7 @@ function Navigation() {
       <header className="hidden md:block h-screen w-[15rem] lg:w-[18rem] bg-slate-900 border-r border-slate-800 text-[20px]">
         <nav>
           <div className="flex flex-row justify-between p-2 border-b border-slate-700 mb-2">
-            <div className="w-[30%]">
+            <div className="w-[4rem]">
               <img src={mockUser.img} className="w-full rounded-full" />
             </div>
             <div className="flex justify-around pl-2 flex-col text-sm w-[70%]">
@@ -53,7 +56,10 @@ function Navigation() {
               </Link>
             </li>
             <li>
-              <button className="cursor-pointer flex flex-row hover:scale-105 duration-300">
+              <button
+                className="cursor-pointer flex flex-row hover:scale-105 duration-300"
+                onClick={logout}
+              >
                 <LogOut className="w-6 h-6 text-white mr-1" />
                 Sign out
               </button>

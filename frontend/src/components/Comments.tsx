@@ -12,6 +12,12 @@ function Comments({ comments, showAll }: IComments) {
       className={`flex flex-col gap-5 border border-slate-500 rounded-xl p-2 mt-10 sm:mt-0  bg-gradient-to-b from-gray-700 to-slate-800 h-[18rem]  overflow-y-scroll scrollbar-hide `}
     >
       <h2 className="text-center">Comments</h2>
+      {displayedComments.length === 0 && (
+        <p className="m-auto flex flex-col text-center">
+          No comments yet{" "}
+          <span className="text-gray-400">Be the first to comment</span>
+        </p>
+      )}
       {displayedComments.map((comment, index) => (
         <li className="flex flex-row gap-2" key={index}>
           <div className="w-[10%] sm:w-[8%]">

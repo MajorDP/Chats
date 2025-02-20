@@ -3,13 +3,32 @@ import { IPosts } from "../interfaces/posts";
 import { Link } from "react-router-dom";
 import CommentForm from "./CommentForm";
 import Comments from "./Comments";
+import { updateVote } from "../services/posts-services";
 
 interface IPostItem {
   post: IPosts;
+  setPosts: React.Dispatch<React.SetStateAction<IPosts[] | null>>;
 }
 
-function Post({ post }: IPostItem) {
+function Post({ post, setPosts }: IPostItem) {
+  const [error, setError] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
+
+  const handleVote = async (voteType: string) => {
+    const { data, error } = await updateVote(post.id, voteType);
+    if (error) {
+      setError(error.message);
+    } else {
+      setPosts(
+        (posts) =>
+          posts?.map((currPost) =>
+            currPost.id === post.id ? data : currPost
+          ) || []
+      );
+      setError(null);
+    }
+  };
+
   return (
     <li className="border border-slate-500 flex flex-col w-full lg:max-w-[80%] bg-gradient-to-b from-gray-700 to-slate-800 p-1 sm:p-2 rounded-2xl">
       <div>
@@ -37,14 +56,21 @@ function Post({ post }: IPostItem) {
             <img src={post?.img} className="w-full h-full object-contain" />
           </div>
         </div>
+        {error && <p className="text-center text-xs text-red-500">{error}</p>}
         <div className="flex flex-row gap-4 text-xs mt-1">
-          <button className="bg-white hover:bg-green-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer">
+          <button
+            className="bg-white hover:bg-green-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+            onClick={() => handleVote("like")}
+          >
             👍
           </button>
           <p>
             {post.likes} {post.likes === 1 ? "Like" : "Likes"}
           </p>
-          <button className="bg-white hover:bg-red-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer">
+          <button
+            className="bg-white hover:bg-red-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+            onClick={() => handleVote("dislike")}
+          >
             👎
           </button>
           <div>
@@ -63,7 +89,7 @@ function Post({ post }: IPostItem) {
           showComments ? "h-[30rem]" : "h-0"
         }`}
       >
-        <CommentForm />
+        <CommentForm pid={post.id} setPosts={setPosts} />
         <Comments showAll={false} comments={post.comments} />
         <div className="w-full mt-5 flex justify-center underline">
           <Link to={`/post/${post.id}`} className="text-xs text-center">
