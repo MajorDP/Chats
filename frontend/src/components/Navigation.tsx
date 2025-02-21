@@ -14,7 +14,7 @@ function Navigation() {
   };
   return (
     <>
-      <header className="hidden md:block h-screen w-[15rem] lg:w-[18rem] bg-slate-900 border-r border-slate-800 text-[20px]">
+      <header className="hidden md:block h-screen min-w-[13rem] lg:min-w-[15rem] bg-slate-900 border-r border-slate-800 text-[20px]">
         <nav>
           <div className="flex flex-row justify-between p-2 border-b border-slate-700 mb-2">
             <div className="w-[4rem]">

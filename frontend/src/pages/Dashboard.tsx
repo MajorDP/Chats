@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import FriendList from "../components/FriendList";
 import PostsList from "../components/PostsList";
 import { IPosts } from "../interfaces/posts";
+import Spinner from "../components/Spinner";
 
 function Dashboard() {
   const [posts, setPosts] = useState<IPosts[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  console.log(posts);
   useEffect(() => {
     const getPosts = async () => {
       const res = await fetch("http://localhost:5000/posts");
@@ -17,17 +19,15 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden flex flex-row ml-2 rounded-xl">
+    <div className="w-full overflow-hidden flex flex-row rounded-xl">
       {!isLoading && posts ? (
-        <div className="w-full md:w-[70%]">
+        <div className="w-full md:w-[50%] md:pl-2">
           <PostsList posts={posts} setPosts={setPosts} />
         </div>
       ) : (
-        <p className="w-full overflow-hidden flex flex-row ml-2 rounded-xl">
-          Loading...
-        </p>
+        <Spinner />
       )}
-      <div className="hidden md:block md:w-[70%]">
+      <div className="hidden md:block md:w-[50%]">
         <FriendList />
       </div>
     </div>

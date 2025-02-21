@@ -34,10 +34,10 @@ function Post({ post, setPosts }: IPostItem) {
       <div>
         <div className="flex flex-row w-full p-2">
           <div className="w-[25%] md:max-w-[15%] xl:max-w-[15%]">
-            <img src={post.userImg} className="rounded-full w-fit" />
+            <img src={post.user.img} className="rounded-full w-fit" />
           </div>
           <div className="flex flex-col justify-start ml-2 w-[75%] xl:max-w-[85%]">
-            <p className="text-lg">{post.username}</p>
+            <p className="text-lg">{post.user.username}</p>
             <p className="text-sm text-gray-400">{post.datePosted}</p>
             <div className="hidden sm:flex flex-col w-full">
               <p className="break-words w-full my-2">{post.message}</p>

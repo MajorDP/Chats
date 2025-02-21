@@ -9,22 +9,27 @@ export const AuthContext = createContext<{
     username: string | null;
   };
   login: (authData: IAuthData) => Promise<void>;
+  register: (authData: IAuthData) => Promise<void>;
   logout: () => void;
 }>({
   error: null,
   user: { id: null, email: null, username: null },
   login: async () => {},
+  register: async () => {},
   logout: () => {},
 });
 
 interface IAuthData {
   email: string;
   password: string;
+  username?: string;
+  repeatPassword?: string;
 }
 
 interface IAuthProviderProps {
   children: ReactNode;
 }
+
 export const AuthProvider = ({ children }: IAuthProviderProps) => {
   const navigate = useNavigate();
   const session = sessionStorage.getItem("user");
@@ -47,7 +52,31 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     });
 
     if (!res.ok) {
-      console.log("aa");
+      const errorData = await res.json();
+      setError(errorData.message);
+      return;
+    }
+    const data = await res.json();
+    sessionStorage.setItem("user", JSON.stringify(data));
+    setUser(data);
+    navigate("/");
+  };
+
+  const register = async (authData: IAuthData) => {
+    const res = await fetch("http://localhost:5000/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: authData.email,
+        username: authData.username,
+        password: authData.password,
+        repeatPassword: authData.repeatPassword,
+      }),
+    });
+
+    if (!res.ok) {
       const errorData = await res.json();
       setError(errorData.message);
       return;
@@ -63,7 +92,7 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     navigate("/auth");
   };
   return (
-    <AuthContext.Provider value={{ user, login, error, logout }}>
+    <AuthContext.Provider value={{ user, error, register, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

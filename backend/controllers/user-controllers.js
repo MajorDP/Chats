@@ -1,26 +1,68 @@
 const HttpError = require("../models/httpError");
-
-const mockUserData = [
-  {
-    id: "1",
-    email: "asura@abv.bg",
-    password: "123123",
-    username: "Asura",
-  },
-];
+const User = require("../models/user");
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  const user = mockUserData.find(
-    (user) => user.email === email && user.password === password
-  );
+  let existingUser;
 
-  if (!user) {
-    return next(new HttpError("Invalid credentials", 404));
+  try {
+    existingUser = await User.findOne({ email });
+  } catch (error) {
+    return next(new HttpError("Sign in failed, please try again later.", 500));
   }
 
-  res.json({ id: user.id, email: user.email, username: user.username });
+  if (!existingUser || existingUser.password !== password) {
+    return next(new HttpError("Invalid credentials", 422));
+  }
+
+  const userResponse = {
+    id: existingUser.id,
+    email: existingUser.email,
+    username: existingUser.username,
+  };
+
+  res.json(userResponse);
+};
+
+const register = async (req, res, next) => {
+  const { email, username, password, repeatPassword } = req.body;
+
+  if (password !== repeatPassword) {
+    return next(new HttpError("Passwords don't match.", 401));
+  }
+
+  let existingUser;
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (error) {
+    return next(new HttpError("Sign up failed, please try again later.", 500));
+  }
+
+  if (existingUser) {
+    return next(new HttpError("User with this email already exists.", 422));
+  }
+
+  const createdUser = new User({
+    email,
+    password,
+    username,
+  });
+
+  try {
+    await createdUser.save();
+  } catch (error) {
+    return next(new HttpError("Sign up failed, please try again later.", 500));
+  }
+
+  const userResponse = {
+    id: createdUser.id,
+    email: createdUser.email,
+    username: createdUser.username,
+  };
+
+  res.status(201).json(userResponse);
 };
 
 exports.login = login;
+exports.register = register;

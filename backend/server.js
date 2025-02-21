@@ -3,6 +3,7 @@ const cors = require("cors");
 
 const postRoutes = require("./routes/post-routes");
 const userRoutes = require("./routes/user-routes");
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -20,4 +21,14 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred." });
 });
 
-app.listen(5000);
+mongoose
+  .connect(
+    "mongodb+srv://pavel:7539518462@socialmedia.nzv9q.mongodb.net/?retryWrites=true&w=majority&appName=socialMedia"
+  )
+  .then(() => {
+    console.log("yes");
+    app.listen(5000);
+  })
+  .catch((err) => {
+    console.log("no");
+  });

@@ -1,4 +1,5 @@
 const HttpError = require("../models/httpError");
+const Post = require("../models/posts");
 
 const mockPosts = [
   {
@@ -19,15 +20,6 @@ const mockPosts = [
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
         comment:
           "Amazing posAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postt",
-        likes: 0,
-      },
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
         likes: 0,
       },
     ],
@@ -56,21 +48,39 @@ const mockPosts = [
 ];
 
 const getPosts = async (req, res, next) => {
-  res.json(mockPosts);
+  let posts;
+
+  try {
+    posts = await Post.find()
+      .populate("user", "username img")
+      .populate("comments.user", "username img");
+  } catch (error) {
+    return next(new HttpError("Couldn't get posts.", 500));
+  }
+  res.json(posts.map((post) => post.toObject({ getters: true })));
 };
 
 const getPostById = async (req, res, next) => {
   const id = req.params.pid;
 
-  const post = mockPosts.find((post) => post.id === id);
-  console.log("AA");
-  res.json(post);
+  let post;
+
+  try {
+    post = await Post.findById(id)
+      .populate("user", "username img")
+      .populate("comments.user", "username img")
+      .exec();
+  } catch (error) {
+    return next(new HttpError("Couldn't get post.", 500));
+  }
+
+  res.json(post.toObject({ getters: true }));
 };
 
 const likePost = async (req, res, next) => {
   const postId = req.params.pid;
 
-  const postIndex = mockPosts.findIndex((post) => post.id === postId);
+  const post = Post.findById(postId);
 
   if (postIndex === -1) {
     return next(new HttpError("Post could not be found", 404));

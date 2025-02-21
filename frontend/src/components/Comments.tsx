@@ -21,12 +21,12 @@ function Comments({ comments, showAll }: IComments) {
       {displayedComments.map((comment, index) => (
         <li className="flex flex-row gap-2" key={index}>
           <div className="w-[10%] sm:w-[8%]">
-            <img src={comment.userImg} className="w-full rounded-full" />
+            <img src={comment.user.img} className="w-full rounded-full" />
           </div>
 
           <div className="flex gap-2 flex-col text-sm w-full">
             <div className="flex flex-row gap-2">
-              <p className="truncate text-xs">{comment.username}</p>
+              <p className="truncate text-xs">{comment.user.username}</p>
               <p className="text-[12px] truncate text-gray-400">
                 {comment.datePosted}
               </p>

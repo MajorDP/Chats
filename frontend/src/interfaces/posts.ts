@@ -1,8 +1,10 @@
 export interface IPosts {
   id: string;
   datePosted: string;
-  username: string;
-  userImg: string;
+  user: {
+    username: string;
+    img: string;
+  };
   message?: string;
   img?: string;
   video?: string;
@@ -11,9 +13,10 @@ export interface IPosts {
 }
 
 export interface IComment {
-  userId: string;
-  username: string;
-  userImg: string;
+  user: {
+    username: string;
+    img: string;
+  };
   datePosted: string;
   comment: string;
   likes: number;
