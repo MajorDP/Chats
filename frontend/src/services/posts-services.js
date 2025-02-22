@@ -1,9 +1,10 @@
-export const updateVote = async (pid, voteType) => {
+export const updateVote = async (uid, pid, voteType) => {
   const res = await fetch(`http://localhost:5000/posts/${voteType}/${pid}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({ userId: uid }),
   });
 
   if (!res.ok) {

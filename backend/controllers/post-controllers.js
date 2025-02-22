@@ -1,5 +1,6 @@
 const HttpError = require("../models/httpError");
 const Post = require("../models/posts");
+const User = require("../models/user");
 
 const mockPosts = [
   {
@@ -79,42 +80,107 @@ const getPostById = async (req, res, next) => {
 
 const likePost = async (req, res, next) => {
   const postId = req.params.pid;
+  const { userId } = req.body;
 
-  const post = Post.findById(postId);
+  let post;
+  let user;
 
-  if (postIndex === -1) {
-    return next(new HttpError("Post could not be found", 404));
+  try {
+    post = await Post.findById(postId).populate("user", "username img");
+    user = await User.findById(userId, "-password -img");
+  } catch (error) {
+    return next(new HttpError("Couldn't find post or user.", 500));
   }
 
-  // Create a new object to avoid mutating the original reference
-  mockPosts[postIndex] = {
-    ...mockPosts[postIndex],
-    likes: mockPosts[postIndex].likes + 1,
+  if (!post || !user) {
+    return next(new HttpError("Couldn't find post or user.", 500));
+  }
+
+  const isLiked = user.votes.liked.find((post) => post.toString() === postId);
+  const isDisliked = user.votes.disliked.find(
+    (post) => post.toString() === postId
+  );
+
+  if (isLiked) {
+    post.likes = post.likes - 1;
+    user.votes.liked = user.votes.liked.filter(
+      (post) => post.toString() !== postId
+    );
+  } else {
+    post.likes = isDisliked ? post.likes + 2 : post.likes + 1;
+    if (isDisliked) {
+      user.votes.disliked = user.votes.disliked.filter(
+        (post) => post.toString() !== postId
+      );
+    }
+    user.votes.liked.push(postId);
+  }
+  await post.save();
+  await user.save();
+
+  const userResponse = {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    votes: user.votes,
   };
-
-  console.log("Updated likes:", mockPosts[postIndex].likes);
-
-  res.json(mockPosts[postIndex]);
+  res.json({
+    post: post.toObject({ getters: true }),
+    user: userResponse,
+  });
 };
 
 const dislikePost = async (req, res, next) => {
   const postId = req.params.pid;
+  const { userId } = req.body;
 
-  const postIndex = mockPosts.findIndex((post) => post.id === postId);
+  let post;
+  let user;
 
-  if (postIndex === -1) {
-    return next(new HttpError("Post could not be found", 404));
+  try {
+    post = await Post.findById(postId).populate("user", "username img");
+    user = await User.findById(userId);
+  } catch (error) {
+    return next(new HttpError("Couldn't find post or user.", 500));
   }
 
-  // Create a new object to avoid mutating the original reference
-  mockPosts[postIndex] = {
-    ...mockPosts[postIndex],
-    likes: mockPosts[postIndex].likes - 1,
+  if (!post || !user) {
+    return next(new HttpError("Couldn't find post or user.", 500));
+  }
+
+  const isDisliked = user.votes.disliked.find(
+    (post) => post.toString() === postId
+  );
+  const isLiked = user.votes.liked.find((post) => post.toString() === postId);
+
+  if (isDisliked) {
+    post.likes += 1;
+    user.votes.disliked = user.votes.disliked.filter(
+      (id) => id.toString() !== postId
+    );
+  } else {
+    post.likes = isLiked ? post.likes - 2 : post.likes - 1;
+    if (isLiked) {
+      user.votes.liked = user.votes.liked.filter(
+        (post) => post.toString() !== postId
+      );
+    }
+    user.votes.disliked.push(postId);
+  }
+
+  await post.save();
+  await user.save();
+
+  const userResponse = {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    votes: user.votes,
   };
-
-  console.log("Updated likes:", mockPosts[postIndex].likes);
-
-  res.json(mockPosts[postIndex]);
+  res.json({
+    post: post.toObject({ getters: true }),
+    user: userResponse,
+  });
 };
 
 const postComment = async (req, res, next) => {

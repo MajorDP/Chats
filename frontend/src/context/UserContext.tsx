@@ -1,22 +1,37 @@
 import { createContext, ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface IUserData {
+  id: string | null;
+  email: string | null;
+  username: string | null;
+  votes: {
+    liked: string[];
+    disliked: string[];
+  };
+}
 export const AuthContext = createContext<{
   error: string | null;
-  user: {
-    id: string | null;
-    email: string | null;
-    username: string | null;
-  };
+  user: IUserData;
   login: (authData: IAuthData) => Promise<void>;
   register: (authData: IAuthData) => Promise<void>;
   logout: () => void;
+  updateUser: (userData: IUserData) => void;
 }>({
   error: null,
-  user: { id: null, email: null, username: null },
+  user: {
+    id: null,
+    email: null,
+    username: null,
+    votes: {
+      liked: [],
+      disliked: [],
+    },
+  },
   login: async () => {},
   register: async () => {},
   logout: () => {},
+  updateUser: () => {},
 });
 
 interface IAuthData {
@@ -38,6 +53,11 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   );
 
   const [error, setError] = useState<string | null>(null);
+
+  const updateUser = (userData: IUserData) => {
+    setUser(userData);
+    sessionStorage.setItem("user", JSON.stringify(userData));
+  };
 
   const login = async (authData: IAuthData) => {
     const res = await fetch("http://localhost:5000/auth/login", {
@@ -92,7 +112,9 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
     navigate("/auth");
   };
   return (
-    <AuthContext.Provider value={{ user, error, register, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, error, register, login, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

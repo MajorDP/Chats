@@ -7,7 +7,7 @@ import Spinner from "../components/Spinner";
 function Dashboard() {
   const [posts, setPosts] = useState<IPosts[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(posts);
+
   useEffect(() => {
     const getPosts = async () => {
       const res = await fetch("http://localhost:5000/posts");

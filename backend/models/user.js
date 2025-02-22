@@ -11,6 +11,10 @@ const User = new Schema({
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
   },
   password: { type: String, required: true },
+  votes: {
+    liked: [{ type: mongoose.Types.ObjectId, ref: "Post", default: [] }],
+    disliked: [{ type: mongoose.Types.ObjectId, ref: "Post", default: [] }],
+  },
 });
 
 module.exports = mongoose.model("User", User);

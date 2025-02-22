@@ -20,6 +20,7 @@ const login = async (req, res, next) => {
     id: existingUser.id,
     email: existingUser.email,
     username: existingUser.username,
+    votes: existingUser.votes,
   };
 
   res.json(userResponse);
@@ -59,6 +60,7 @@ const register = async (req, res, next) => {
     id: createdUser.id,
     email: createdUser.email,
     username: createdUser.username,
+    votes: createdUser.votes,
   };
 
   res.status(201).json(userResponse);

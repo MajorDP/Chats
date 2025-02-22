@@ -2,12 +2,14 @@ import { useParams } from "react-router-dom";
 import CommentForm from "../components/CommentForm";
 import Comments from "../components/Comments";
 import { IPosts } from "../interfaces/posts";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { updateVote } from "../services/posts-services";
 import Spinner from "../components/Spinner";
+import { AuthContext } from "../context/UserContext";
 
 function PostPage() {
   const { pid } = useParams();
+  const { user, updateUser } = useContext(AuthContext);
 
   const [error, setError] = useState<string | null>(null);
   const [post, setPost] = useState<IPosts | null>(null);
@@ -22,19 +24,34 @@ function PostPage() {
     getPost();
   }, [pid]);
 
-  const handleVote = async (voteType: string) => {
-    const { data, error } = await updateVote(pid, voteType);
-    if (error) {
-      setError(error.message);
-    } else {
-      setPost(data);
-      setError(null);
-    }
-  };
-
   if (isLoading) {
     return <Spinner />;
   }
+
+  if (!post?.id) {
+    return <p>{post?.message}</p>;
+  }
+
+  const handleVote = async (voteType: string) => {
+    const { data, error } = await updateVote(
+      user.id,
+      post?.id || null,
+      voteType
+    );
+
+    if (error) {
+      setError(error.message);
+    } else {
+      setPost(data.post);
+      updateUser(data.user);
+      setError(null);
+    }
+  };
+  const isVoted = user.votes.liked.includes(post.id)
+    ? "liked"
+    : user.votes.disliked.includes(post.id)
+    ? "disliked"
+    : null;
 
   return (
     <div className="w-full overflow-hidden flex flex-row rounded-xl mb-16">
@@ -71,9 +88,11 @@ function PostPage() {
             {error && (
               <p className="text-center text-xs text-red-500">{error}</p>
             )}
-            <div className="flex flex-row gap-4 text-xs mt-1 m-auto w-fit">
+            <div className="flex flex-row gap-4 text-xs mt-1 justify-center">
               <button
-                className="bg-white hover:bg-green-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+                className={`${
+                  isVoted === "liked" ? "bg-green-500" : "bg-white"
+                } hover:bg-green-600 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer`}
                 onClick={() => handleVote("like")}
               >
                 👍
@@ -82,7 +101,9 @@ function PostPage() {
                 {post?.likes} {post?.likes === 1 ? "Like" : "Likes"}
               </p>
               <button
-                className="bg-white hover:bg-red-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+                className={`${
+                  isVoted === "disliked" ? "bg-red-500" : "bg-white"
+                } hover:bg-red-600 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer`}
                 onClick={() => handleVote("dislike")}
               >
                 👎

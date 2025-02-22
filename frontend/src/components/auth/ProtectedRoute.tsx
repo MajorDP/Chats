@@ -5,7 +5,6 @@ import { Navigate, Outlet } from "react-router-dom";
 function ProtectedRoute() {
   const { user } = useContext(AuthContext);
 
-  console.log(user);
   if (user.id) {
     return <Outlet />;
   } else {

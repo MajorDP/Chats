@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { IPosts } from "../interfaces/posts";
 import { Link } from "react-router-dom";
 import CommentForm from "./CommentForm";
 import Comments from "./Comments";
 import { updateVote } from "../services/posts-services";
+import { AuthContext } from "../context/UserContext";
 
 interface IPostItem {
   post: IPosts;
@@ -11,23 +12,32 @@ interface IPostItem {
 }
 
 function Post({ post, setPosts }: IPostItem) {
+  const { user, updateUser } = useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
   const [showComments, setShowComments] = useState(false);
 
   const handleVote = async (voteType: string) => {
-    const { data, error } = await updateVote(post.id, voteType);
+    const { data, error } = await updateVote(user.id, post.id, voteType);
+
     if (error) {
       setError(error.message);
     } else {
       setPosts(
         (posts) =>
           posts?.map((currPost) =>
-            currPost.id === post.id ? data : currPost
+            currPost.id === post.id ? data.post : currPost
           ) || []
       );
+      updateUser(data.user);
       setError(null);
     }
   };
+
+  const isVoted = user.votes.liked.includes(post.id)
+    ? "liked"
+    : user.votes.disliked.includes(post.id)
+    ? "disliked"
+    : null;
 
   return (
     <li className="border border-slate-500 flex flex-col w-full lg:max-w-[80%] bg-gradient-to-b from-gray-700 to-slate-800 p-1 sm:p-2 rounded-2xl">
@@ -59,7 +69,9 @@ function Post({ post, setPosts }: IPostItem) {
         {error && <p className="text-center text-xs text-red-500">{error}</p>}
         <div className="flex flex-row gap-4 text-xs mt-1">
           <button
-            className="bg-white hover:bg-green-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+            className={`${
+              isVoted === "liked" ? "bg-green-500" : "bg-white"
+            } hover:bg-green-600 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer`}
             onClick={() => handleVote("like")}
           >
             👍
@@ -68,7 +80,9 @@ function Post({ post, setPosts }: IPostItem) {
             {post.likes} {post.likes === 1 ? "Like" : "Likes"}
           </p>
           <button
-            className="bg-white hover:bg-red-500 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer"
+            className={`${
+              isVoted === "disliked" ? "bg-red-500" : "bg-white"
+            } hover:bg-red-600 hover:scale-110 duration-100 text-transparent bg-clip-text cursor-pointer`}
             onClick={() => handleVote("dislike")}
           >
             👎
