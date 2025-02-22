@@ -14,53 +14,58 @@ function Navigation() {
   };
   return (
     <>
-      <header className="hidden md:block h-screen min-w-[13rem] lg:min-w-[15rem] bg-slate-900 border-r border-slate-800 text-[20px]">
+      <header className="hidden md:block h-screen min-w-[13rem] lg:min-w-[15rem] bg-gradient-to-b from-gray-900 to-blue-950 border-r border-blue-950 text-[20px] shadow-lg">
         <nav>
-          <div className="flex flex-row justify-between p-2 border-b border-slate-700 mb-2">
+          <div className="flex flex-row justify-between p-3 border-b border-blue-950 mb-3">
             <div className="w-[4rem]">
-              <img src={mockUser.img} className="w-full rounded-full" />
+              <img
+                src={mockUser.img}
+                className="w-full rounded-full border-2 border-cyan-500 shadow-md shadow-cyan-600/50"
+              />
             </div>
-            <div className="flex justify-around pl-2 flex-col text-sm w-[70%]">
-              <p className="truncate">{mockUser.username}</p>
-              <p className="text-xs truncate text-gray-400">
+            <div className="flex justify-around pl-2 flex-col w-[70%]">
+              <p className="truncate text-cyan-400 font-medium">
+                {mockUser.username}
+              </p>
+              <p className="text-[15px] truncate text-blue-300">
                 {mockUser.status}
               </p>
             </div>
           </div>
-          <ul className="flex flex-col pl-3 text-lg items-start h-40 justify-between mt-4">
+          <ul className="flex flex-col pl-3 items-start h-40 justify-between mt-4">
             <li>
               <Link
                 to="/"
-                className="flex flex-row hover:scale-105 duration-300"
+                className="flex flex-row items-center hover:scale-110 duration-300 text-cyan-300 hover:text-cyan-500"
               >
-                <Home className="w-6 h-6 text-white mr-1" />
+                <Home className="w-6 h-6 text-cyan-300 mr-2" />
                 Dashboard
               </Link>
             </li>
             <li>
               <Link
                 to="/explore"
-                className="flex flex-row hover:scale-105 duration-300"
+                className="flex flex-row items-center hover:scale-110 duration-300 text-cyan-300 hover:text-cyan-500"
               >
-                <Compass className="w-6 h-6 text-white mr-1" />
+                <Compass className="w-6 h-6 text-cyan-300 mr-2" />
                 Explore
               </Link>
             </li>
             <li>
               <Link
                 to="/user"
-                className="flex flex-row hover:scale-105 duration-300"
+                className="flex flex-row items-center hover:scale-110 duration-300 text-cyan-300 hover:text-cyan-500"
               >
-                <User className="w-6 h-6 text-white mr-1" />
+                <User className="w-6 h-6 text-cyan-300 mr-2" />
                 Account
               </Link>
             </li>
             <li>
               <button
-                className="cursor-pointer flex flex-row hover:scale-105 duration-300"
+                className="cursor-pointer flex flex-row items-center hover:scale-110 duration-300 text-red-400 hover:text-red-500"
                 onClick={logout}
               >
-                <LogOut className="w-6 h-6 text-white mr-1" />
+                <LogOut className="w-6 h-6 text-red-400 mr-2" />
                 Sign out
               </button>
             </li>
@@ -68,27 +73,27 @@ function Navigation() {
         </nav>
       </header>
 
-      <header className="block md:hidden w-full bg-slate-900 bottom-0 fixed">
+      <header className="block md:hidden w-full bg-gradient-to-b from-gray-900 to-blue-950 bottom-0 fixed border-t border-blue-800 shadow-lg">
         <nav>
-          <ul className="py-2 w-[80%] m-auto flex flex-row justify-between items-center">
+          <ul className="py-3 w-[80%] m-auto flex flex-row justify-between items-center">
             <li>
-              <Link to="/">
-                <Home className="w-6 h-6 text-white" />
+              <Link to="/" className="hover:scale-110 duration-300">
+                <Home className="w-6 h-6 text-cyan-300 hover:text-cyan-500" />
               </Link>
             </li>
             <li>
-              <Link to="/explore">
-                <Compass className="w-6 h-6 text-white" />
+              <Link to="/explore" className="hover:scale-110 duration-300">
+                <Compass className="w-6 h-6 text-cyan-300 hover:text-cyan-500" />
               </Link>
             </li>
             <li>
-              <Link to="/user">
-                <User className="w-6 h-6 text-white" />
+              <Link to="/user" className="hover:scale-110 duration-300">
+                <User className="w-6 h-6 text-cyan-300 hover:text-cyan-500" />
               </Link>
             </li>
             <li>
-              <button className="cursor-pointer">
-                <LogOut className="w-6 h-6 text-white" />
+              <button className="cursor-pointer hover:scale-110 duration-300">
+                <LogOut className="w-6 h-6 text-red-400 hover:text-red-500" />
               </button>
             </li>
           </ul>

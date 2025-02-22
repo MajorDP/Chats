@@ -5,10 +5,9 @@ import { AuthContext } from "../context/UserContext";
 
 interface ICommentForm {
   pid: string;
-  setPost?: React.Dispatch<React.SetStateAction<IPosts | null>>;
-  setPosts?: React.Dispatch<React.SetStateAction<IPosts[] | null>>;
+  handleSetPosts: (data: IPosts) => void;
 }
-function CommentForm({ pid, setPost, setPosts }: ICommentForm) {
+function CommentForm({ pid, handleSetPosts }: ICommentForm) {
   const { user } = useContext(AuthContext);
   const [error, setError] = useState<string | null>(null);
   const [comment, setComment] = useState("");
@@ -20,41 +19,31 @@ function CommentForm({ pid, setPost, setPosts }: ICommentForm) {
     if (error) {
       setError(error.message);
     } else {
-      if (setPost) {
-        setPost(data);
-      }
-      if (setPosts) {
-        setPosts(
-          (posts) =>
-            posts?.map((currPost) =>
-              currPost.id === data.id ? data : currPost
-            ) || []
-        );
-      }
+      handleSetPosts(data);
       setComment("");
       setError(null);
     }
   };
   return (
     <form
-      className="my-5 flex flex-col justify-center"
+      className="my-5 flex flex-col justify-center w-full sm:w-[90%] m-auto bg-gradient-to-b from-gray-900 to-blue-950 p-3 rounded-xl shadow-lg border border-blue-900"
       onSubmit={(e) => handleSubmit(e)}
     >
-      <p className="text-sm mb-1">
+      <p className="text-sm mb-2 text-white font-medium">
         Leave a comment{" "}
-        <span className="block sm:inline text-xs sm:text-xs text-gray-300">
+        <span className="block sm:inline text-xs sm:text-xs text-white">
           (Max. 200 characters)
         </span>
       </p>
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        className="bg-white text-black text-sm px-1 py-1 resize-none w-full rounded-md focus:outline-0 scrollbar-hide"
+        className="bg-gray-800 text-white text-sm px-3 py-2 resize-none rounded-md focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all duration-200 scrollbar-hide border border-blue-700 shadow-inner shadow-blue-900"
         maxLength={200}
       />
       {error && <p className="text-center text-xs text-red-500">{error}</p>}
       <button
-        className="hover:bg-gray-600 text-sm bg-gray-700 mt-2 px-2 py-1 rounded-xl w-44 m-auto hover:scale-105 cursor-pointer duration-300"
+        className="hover:bg-cyan-500 text-black font-medium text-sm bg-cyan-400 mt-3 px-4 py-2 rounded-xl w-44 m-auto hover:scale-105 cursor-pointer duration-300 shadow-md shadow-cyan-500/50 border border-cyan-600 disabled:bg-gray-500 disabled:cursor-default"
         disabled={!comment}
       >
         Comment

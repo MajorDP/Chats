@@ -37,7 +37,7 @@ function FriendList() {
           onClose={() => setSelectedFriend(null)}
         />
       )}
-      <div className="w-[15rem] m-auto h-fit bg-gradient-to-b from-gray-700 to-slate-800 rounded-xl border border-slate-500 mt-2">
+      <div className="w-[15rem] m-auto h-fit bg-gradient-to-b from-gray-900 to-blue-950 rounded-xl border border-blue-900 mt-2">
         <h2 className="text-center py-4 font-semilight">Friends</h2>
         <ul>
           {mockFriendsData.map((friend, index) => (
@@ -57,7 +57,7 @@ function FriendList() {
                 </p>
               </div>
               <button
-                className="w-fit text-[12px] cursor-pointer border h-6 m-auto px-2 py-1 rounded-xl border-slate-400 bg-gray-800 hover:bg-gray-700 duration-300"
+                className="w-fit text-[12px] cursor-pointer border h-6 m-auto px-2 py-1 rounded-xl border-blue-900 bg-gray-700 hover:bg-gray-800 duration-300"
                 onClick={() =>
                   setSelectedFriend({
                     id: friend.id,
