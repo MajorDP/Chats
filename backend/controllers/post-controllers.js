@@ -1,52 +1,7 @@
 const HttpError = require("../models/httpError");
+const mongoose = require("mongoose");
 const Post = require("../models/posts");
 const User = require("../models/user");
-
-const mockPosts = [
-  {
-    id: "p1",
-    datePosted: "19.02.2025",
-    username: "Asura",
-    userImg:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-    message: "This shit so ass",
-    img: "https://preview.redd.it/this-shit-is-so-ass-v0-33ef927zzngd1.jpeg?width=1080&crop=smart&auto=webp&s=33c6fd685d73fa6ba4bc9dda21c60c12a3938c1d",
-    likes: 254,
-    comments: [
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment:
-          "Amazing posAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postAmazing postt",
-        likes: 0,
-      },
-    ],
-  },
-  {
-    id: "p2",
-    datePosted: "19.02.2025",
-    username: "Asura",
-    userImg:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-    message: "This shit so ass",
-    img: "https://cdn.discordapp.com/attachments/648600190919376897/1341571085082034288/IMG_8501.jpg?ex=67b67aef&is=67b5296f&hm=3266b5f53671bf22db6d5ea81fdabaafd45db7adb9297ae54cbe3b99a39d93a8&",
-    likes: 254,
-    comments: [
-      {
-        userId: "1",
-        username: "Asura",
-        datePosted: "20.02.2025",
-        userImg:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-        comment: "Amazing post",
-        likes: 0,
-      },
-    ],
-  },
-];
 
 const getPosts = async (req, res, next) => {
   let posts;
@@ -86,7 +41,9 @@ const likePost = async (req, res, next) => {
   let user;
 
   try {
-    post = await Post.findById(postId).populate("user", "username img");
+    post = await Post.findById(postId)
+      .populate("user", "username img")
+      .populate("comments.user", "username img");
     user = await User.findById(userId, "-password -img");
   } catch (error) {
     return next(new HttpError("Couldn't find post or user.", 500));
@@ -138,7 +95,9 @@ const dislikePost = async (req, res, next) => {
   let user;
 
   try {
-    post = await Post.findById(postId).populate("user", "username img");
+    post = await Post.findById(postId)
+      .populate("user", "username img")
+      .populate("comments.user", "username img");
     user = await User.findById(userId);
   } catch (error) {
     return next(new HttpError("Couldn't find post or user.", 500));
@@ -177,6 +136,7 @@ const dislikePost = async (req, res, next) => {
     email: user.email,
     votes: user.votes,
   };
+
   res.json({
     post: post.toObject({ getters: true }),
     user: userResponse,
@@ -185,11 +145,27 @@ const dislikePost = async (req, res, next) => {
 
 const postComment = async (req, res, next) => {
   const pid = req.params.pid;
-  const comment = req.body;
-  const post = mockPosts.find((post) => post.id === pid);
-  console.log(comment);
-  post.comments.unshift(comment);
-  res.json(post);
+  const { uid, comment } = req.body;
+
+  let post;
+  let user;
+  try {
+    post = await Post.findById(pid).populate("user", "username img");
+    user = await User.findById(uid);
+  } catch (error) {
+    return next(new HttpError("Couldn't find post or user.", 500));
+  }
+
+  const commentObj = {
+    user: new mongoose.Types.ObjectId(uid),
+    comment: comment,
+    datePosted: new Date().toISOString().split("T")[0],
+  };
+
+  post.comments.push(commentObj);
+  post.save();
+  await post.populate("comments.user", "username img");
+  res.json(post.toObject({ getters: true }));
 };
 
 exports.getPosts = getPosts;

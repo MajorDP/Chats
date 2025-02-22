@@ -23,13 +23,8 @@ function PostPage() {
     };
     getPost();
   }, [pid]);
-
   if (isLoading) {
     return <Spinner />;
-  }
-
-  if (!post?.id) {
-    return <p>{post?.message}</p>;
   }
 
   const handleVote = async (voteType: string) => {
@@ -47,9 +42,10 @@ function PostPage() {
       setError(null);
     }
   };
-  const isVoted = user.votes.liked.includes(post.id)
+
+  const isVoted = user.votes.liked.includes(post?.id || "")
     ? "liked"
-    : user.votes.disliked.includes(post.id)
+    : user.votes.disliked.includes(post?.id || "")
     ? "disliked"
     : null;
 

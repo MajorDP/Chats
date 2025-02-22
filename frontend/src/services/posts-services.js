@@ -16,14 +16,13 @@ export const updateVote = async (uid, pid, voteType) => {
   }
 };
 
-export const postComment = async (pid, commentObj) => {
-  console.log(commentObj);
+export const postComment = async (uid, pid, comment) => {
   const res = await fetch(`http://localhost:5000/posts/comment/${pid}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(commentObj),
+    body: JSON.stringify({ uid: uid, comment: comment }),
   });
 
   if (!res.ok) {

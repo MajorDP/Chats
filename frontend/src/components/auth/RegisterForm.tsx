@@ -18,7 +18,7 @@ function RegisterForm({ setIsLogin }: IRegisterForm) {
     password: "",
     repeatPassword: "",
   });
-  console.log(authData);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await register(authData);

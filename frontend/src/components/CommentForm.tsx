@@ -15,22 +15,11 @@ function CommentForm({ pid, setPost, setPosts }: ICommentForm) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const commentObj = {
-      userId: user.id,
-      username: user.username,
-      datePosted: new Date().toISOString().split("T")[0],
-      userImg:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-      comment: comment,
-      likes: 0,
-    };
-
-    const { data, error } = await postComment(pid, commentObj);
+    const { data, error } = await postComment(user.id, pid, comment);
 
     if (error) {
       setError(error.message);
     } else {
-      console.log(data);
       if (setPost) {
         setPost(data);
       }

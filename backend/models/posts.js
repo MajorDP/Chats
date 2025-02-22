@@ -16,7 +16,7 @@ const Post = new Schema({
         required: true,
       },
       comment: { type: String, required: true, maxlength: 500 },
-      datePosted: { type: Date, required: true },
+      datePosted: { type: String, required: true },
       likes: { type: Number, default: 0 },
     },
   ],
