@@ -92,7 +92,10 @@ function Navigation() {
               </Link>
             </li>
             <li>
-              <button className="cursor-pointer hover:scale-110 duration-300">
+              <button
+                className="cursor-pointer hover:scale-110 duration-300"
+                onClick={logout}
+              >
                 <LogOut className="w-6 h-6 text-red-400 hover:text-red-500" />
               </button>
             </li>

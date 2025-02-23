@@ -88,7 +88,7 @@ function PostLarge({ post, setPost }: IPostItem) {
           >
             👍
           </button>
-          <p className="text-gray-400 font-medium">
+          <p className="text-gray-400 font-medium flex items-center">
             {post?.likes} {post?.likes === 1 ? "Like" : "Likes"}
           </p>
           <button
