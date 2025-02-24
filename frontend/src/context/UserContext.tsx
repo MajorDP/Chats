@@ -5,6 +5,7 @@ import { singIn, singUp } from "../services/users-services";
 interface IUserData {
   id: string | null;
   email: string | null;
+  img: string | null;
   username: string | null;
   votes: {
     liked: string[];
@@ -23,6 +24,7 @@ export const AuthContext = createContext<{
   user: {
     id: null,
     email: null,
+    img: null,
     username: null,
     votes: {
       liked: [],

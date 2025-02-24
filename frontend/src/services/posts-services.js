@@ -10,10 +10,10 @@ export const updateVote = async (uid, pid, voteType) => {
   if (!res.ok) {
     const errorData = await res.json();
     return { data: null, error: errorData };
-  } else {
-    const data = await res.json();
-    return { data: data, error: null };
   }
+
+  const data = await res.json();
+  return { data: data, error: null };
 };
 
 export const postComment = async (uid, pid, comment) => {
@@ -28,10 +28,10 @@ export const postComment = async (uid, pid, comment) => {
   if (!res.ok) {
     const errorData = await res.json();
     return { data: null, error: errorData };
-  } else {
-    const data = await res.json();
-    return { data: data, error: null };
   }
+
+  const data = await res.json();
+  return { data: data, error: null };
 };
 
 export const getPosts = async () => {
@@ -40,8 +40,8 @@ export const getPosts = async () => {
   if (!res.ok) {
     const errorData = await res.json();
     return { data: null, error: errorData.message };
-  } else {
-    const data = await res.json();
-    return { data, error: null };
   }
+
+  const data = await res.json();
+  return { data, error: null };
 };

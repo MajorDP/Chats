@@ -18,6 +18,7 @@ const login = async (req, res, next) => {
   console.log(existingUser.friends);
   const userResponse = {
     id: existingUser.id,
+    img: existingUser.img,
     email: existingUser.email,
     username: existingUser.username,
     votes: existingUser.votes,

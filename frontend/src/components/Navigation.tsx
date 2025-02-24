@@ -4,14 +4,8 @@ import { useContext } from "react";
 import { AuthContext } from "../context/UserContext";
 
 function Navigation() {
-  const { logout } = useContext(AuthContext);
-  const mockUser = {
-    id: "1",
-    email: "asura@abv.bg",
-    username: "Asura",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
-    status: "Feeling strong rn",
-  };
+  const { user, logout } = useContext(AuthContext);
+
   return (
     <>
       <header className="hidden md:block h-screen min-w-[13rem] lg:min-w-[15rem] bg-gradient-to-b from-gray-900 to-blue-950 border-r border-blue-950 text-[20px] shadow-lg">
@@ -19,16 +13,17 @@ function Navigation() {
           <div className="flex flex-row justify-between p-3 border-b border-blue-950 mb-3">
             <div className="w-[4rem]">
               <img
-                src={mockUser.img}
+                src={user.img || undefined}
+                alt="userImg"
                 className="w-full rounded-full border-2 border-cyan-500 shadow-md shadow-cyan-600/50"
               />
             </div>
             <div className="flex justify-around pl-2 flex-col w-[70%]">
               <p className="truncate text-cyan-400 font-medium">
-                {mockUser.username}
+                {user.username}
               </p>
               <p className="text-[15px] truncate text-blue-300">
-                {mockUser.status}
+                {/* {mockUser.status} */} status later
               </p>
             </div>
           </div>

@@ -4,10 +4,10 @@ export const getFriends = async (uid) => {
   if (!res.ok) {
     const errorData = await res.json();
     return { data: null, error: errorData.message };
-  } else {
-    const data = await res.json();
-    return { data: data, error: null };
   }
+
+  const data = await res.json();
+  return { data: data, error: null };
 };
 
 export const sendFriendRequest = async (id, username) => {
@@ -21,10 +21,10 @@ export const sendFriendRequest = async (id, username) => {
   if (!res.ok) {
     const errorData = await res.json();
     return { success: false, message: errorData.message };
-  } else {
-    const data = await res.json();
-    return { success: true, message: data.message };
   }
+
+  const data = await res.json();
+  return { success: true, message: data.message };
 };
 
 export const singIn = async (authData) => {
@@ -42,10 +42,10 @@ export const singIn = async (authData) => {
   if (!res.ok) {
     const errorData = await res.json();
     return { data: false, error: errorData.message };
-  } else {
-    const data = await res.json();
-    return { data: data, error: null };
   }
+
+  const data = await res.json();
+  return { data: data, error: null };
 };
 
 export const singUp = async (authData) => {
@@ -65,8 +65,8 @@ export const singUp = async (authData) => {
   if (!res.ok) {
     const errorData = await res.json();
     return { data: false, error: errorData.message };
-  } else {
-    const data = await res.json();
-    return { data: data, error: null };
   }
+
+  const data = await res.json();
+  return { data: data, error: null };
 };

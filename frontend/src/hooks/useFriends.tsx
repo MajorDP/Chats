@@ -19,9 +19,10 @@ function useFriends(id: string | null) {
         const { data, error } = await getFriends(id);
         if (error) {
           setError(error);
-        } else {
-          setFriends(data || []);
+          return;
         }
+
+        setFriends(data || []);
       } catch (err) {
         console.log(err);
         setError("Failed to fetch friends. Please try again.");
