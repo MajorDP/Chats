@@ -26,3 +26,47 @@ export const sendFriendRequest = async (id, username) => {
     return { success: true, message: data.message };
   }
 };
+
+export const singIn = async (authData) => {
+  const res = await fetch("http://localhost:5000/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: authData.email,
+      password: authData.password,
+    }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    return { data: false, error: errorData.message };
+  } else {
+    const data = await res.json();
+    return { data: data, error: null };
+  }
+};
+
+export const singUp = async (authData) => {
+  const res = await fetch("http://localhost:5000/auth/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: authData.email,
+      username: authData.username,
+      password: authData.password,
+      repeatPassword: authData.repeatPassword,
+    }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    return { data: false, error: errorData.message };
+  } else {
+    const data = await res.json();
+    return { data: data, error: null };
+  }
+};

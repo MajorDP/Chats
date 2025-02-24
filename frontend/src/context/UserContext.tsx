@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { singIn, singUp } from "../services/users-services";
 
 interface IUserData {
   id: string | null;
@@ -60,48 +61,26 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
   };
 
   const login = async (authData: IAuthData) => {
-    const res = await fetch("http://localhost:5000/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: authData.email,
-        password: authData.password,
-      }),
-    });
+    const { data, error } = await singIn(authData);
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      setError(errorData.message);
+    if (error) {
+      setError(error);
       return;
     }
-    const data = await res.json();
+
     sessionStorage.setItem("user", JSON.stringify(data));
     setUser(data);
     navigate("/");
   };
 
   const register = async (authData: IAuthData) => {
-    const res = await fetch("http://localhost:5000/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: authData.email,
-        username: authData.username,
-        password: authData.password,
-        repeatPassword: authData.repeatPassword,
-      }),
-    });
+    const { data, error } = await singUp(authData);
 
-    if (!res.ok) {
-      const errorData = await res.json();
-      setError(errorData.message);
+    if (error) {
+      setError(error);
       return;
     }
-    const data = await res.json();
+
     sessionStorage.setItem("user", JSON.stringify(data));
     setUser(data);
     navigate("/");

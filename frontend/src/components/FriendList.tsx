@@ -69,7 +69,7 @@ function FriendList() {
           </ul>
         ) : (
           <p className="text-center text-gray-400 py-2 text-xs">
-            No friends found, maybe add some?
+            No friends yet, maybe add some?
           </p>
         )}
       </div>

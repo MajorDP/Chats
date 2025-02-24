@@ -17,6 +17,10 @@ function AddFriendForm({ id }: IAddFriendForm) {
     console.log(success);
 
     setMessage({ success, message });
+    setTimeout(() => {
+      setMessage({ success: null, message: "" });
+    }, 2000);
+
     setUsername("");
   };
   return (
