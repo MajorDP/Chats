@@ -15,7 +15,7 @@ const login = async (req, res, next) => {
   if (!existingUser || existingUser.password !== password) {
     return next(new HttpError("Invalid credentials", 422));
   }
-
+  console.log(existingUser.friends);
   const userResponse = {
     id: existingUser.id,
     email: existingUser.email,
@@ -66,5 +66,24 @@ const register = async (req, res, next) => {
   res.status(201).json(userResponse);
 };
 
+const getFriends = async (req, res, next) => {
+  const uid = req.params.uid;
+  let existingUser;
+
+  try {
+    existingUser = await User.findById(uid, "friends").populate(
+      "friends",
+      "username img"
+    );
+  } catch (error) {
+    return next(new HttpError("Sign in failed, please try again later.", 500));
+  }
+
+  res.json(
+    existingUser.friends.map((friend) => friend.toObject({ getters: true }))
+  );
+};
+
 exports.login = login;
 exports.register = register;
+exports.getFriends = getFriends;

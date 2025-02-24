@@ -97,7 +97,7 @@ function RegisterForm({ setIsLogin }: IRegisterForm) {
       </button>
 
       <button
-        className="block mt-4 text-gray-400 text-sm"
+        className="block mt-4 text-gray-400 text-xs cursor-pointer"
         onClick={(e) => {
           e.preventDefault();
           setIsLogin((prev) => !prev);

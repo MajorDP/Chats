@@ -33,3 +33,15 @@ export const postComment = async (uid, pid, comment) => {
     return { data: data, error: null };
   }
 };
+
+export const getPosts = async () => {
+  const res = await fetch("http://localhost:5000/posts");
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    return { data: null, error: errorData.message };
+  } else {
+    const data = await res.json();
+    return { data, error: null };
+  }
+};

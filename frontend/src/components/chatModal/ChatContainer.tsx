@@ -20,7 +20,7 @@ const chatMessages = [
     message: "Hey man",
   },
   {
-    userId: "1",
+    userId: "67bc5eb4957cca8f7f48bdcf",
     datePosted: "12:30AM, 19.02.2025",
     userImg:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
@@ -28,7 +28,7 @@ const chatMessages = [
     img: "https://cdn.discordapp.com/attachments/648600190919376897/1341571085082034288/IMG_8501.jpg?ex=67b67aef&is=67b5296f&hm=3266b5f53671bf22db6d5ea81fdabaafd45db7adb9297ae54cbe3b99a39d93a8&",
   },
   {
-    userId: "1",
+    userId: "67bc5eb4957cca8f7f48bdcf",
     datePosted: "12:30AM, 19.02.2025",
     userImg:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRa8khy-blRnHeXGcPBjvyrlA2s2SumbWnHxw&s",
@@ -38,6 +38,8 @@ const chatMessages = [
 ];
 
 function ChatContainer({ currentUserId, selectedFriend, onClose }: IChat) {
+  console.log(currentUserId);
+  console.log(selectedFriend);
   return ReactDOM.createPortal(
     <>
       <div

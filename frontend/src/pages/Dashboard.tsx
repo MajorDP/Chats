@@ -1,33 +1,28 @@
-import { useEffect, useState } from "react";
 import FriendList from "../components/FriendList";
 import PostsList from "../components/PostsList";
-import { IPosts } from "../interfaces/posts";
 import Spinner from "../components/Spinner";
+import usePosts from "../hooks/usePosts";
+import Error from "../components/Error";
 
 function Dashboard() {
-  const [posts, setPosts] = useState<IPosts[] | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const getPosts = async () => {
-      const res = await fetch("http://localhost:5000/posts");
-      const data = await res.json();
-      setPosts(data);
-      setIsLoading(false);
-    };
-    getPosts();
-  }, []);
+  const { posts, error, isLoading, setPosts } = usePosts();
 
   return (
     <div className="w-full overflow-hidden flex flex-row rounded-xl">
-      {!isLoading && posts ? (
-        <div className="w-full md:w-[50%] md:pl-2">
+      <div className="w-full md:min-w-1/2">
+        {isLoading ? (
+          <div className="h-screen flex items-center">
+            <Spinner />
+          </div>
+        ) : error ? (
+          <div className="h-screen">
+            <Error error={error} navigate="/" navigateMsg="Refresh page" />
+          </div>
+        ) : posts ? (
           <PostsList posts={posts} setPosts={setPosts} />
-        </div>
-      ) : (
-        <Spinner />
-      )}
-      <div className="hidden md:block md:w-[50%]">
+        ) : null}
+      </div>
+      <div className="hidden md:block md:min-w-1/2">
         <FriendList />
       </div>
     </div>

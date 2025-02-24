@@ -7,6 +7,7 @@ interface IChatProps {
 }
 
 function Chat({ chat, currentUserId }: IChatProps) {
+  console.log(currentUserId);
   const chatRef = useRef(null);
 
   useEffect(() => {

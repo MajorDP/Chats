@@ -56,7 +56,7 @@ function LoginForm({ setIsLogin }: ILoginForm) {
       </button>
 
       <button
-        className="block mt-4 text-gray-400 text-xs"
+        className="block mt-4 text-gray-400 text-xs cursor-pointer"
         onClick={(e) => {
           e.preventDefault();
           setIsLogin((prev) => !prev);
