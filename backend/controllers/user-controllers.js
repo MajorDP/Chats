@@ -84,6 +84,41 @@ const getFriends = async (req, res, next) => {
   );
 };
 
+const sendFriendRequest = async (req, res, next) => {
+  const { id, username } = req.body;
+
+  let foundUser;
+  let currentUser;
+  try {
+    currentUser = await User.findById(id, "username");
+    foundUser = await User.findOne({ username }).populate("requests");
+  } catch (error) {
+    return next(new HttpError("Could not find user.", 500));
+  }
+
+  if (!foundUser || !currentUser) {
+    return next(new HttpError("Could not find user.", 404));
+  }
+
+  if (currentUser.username === username) {
+    return next(new HttpError("That's you.", 400));
+  }
+
+  if (foundUser.requests.find((req) => req.id === id)) {
+    return next(new HttpError("Request already sent.", 500));
+  }
+
+  try {
+    foundUser.requests.push(id);
+    await foundUser.save();
+  } catch (error) {
+    return next(new HttpError("Could not send request.", 500));
+  }
+
+  res.json({ message: "Request sent" });
+};
+
 exports.login = login;
 exports.register = register;
 exports.getFriends = getFriends;
+exports.sendFriendRequest = sendFriendRequest;

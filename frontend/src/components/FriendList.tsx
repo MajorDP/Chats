@@ -4,6 +4,7 @@ import { AuthContext } from "../context/UserContext";
 import Spinner from "./Spinner";
 import Error from "./Error";
 import useFriends from "../hooks/useFriends";
+import AddFriendForm from "./AddFriendForm";
 
 function FriendList() {
   const { user } = useContext(AuthContext);
@@ -23,7 +24,8 @@ function FriendList() {
         />
       )}
       <div className="w-[15rem] m-auto h-fit bg-gradient-to-b from-gray-900 to-blue-950 rounded-xl border border-blue-900 mt-2">
-        <h2 className="text-center py-4 font-semilight">Friends</h2>
+        <AddFriendForm id={user.id as string} />
+        <h2 className="text-center py-2 font-semilight">Friends</h2>
 
         {error && <Error error={error} />}
 
