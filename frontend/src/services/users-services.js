@@ -70,3 +70,24 @@ export const sendFriendRequest = async (id, username) => {
   const data = await res.json();
   return { success: true, message: data.message };
 };
+
+export const handleFriendRequests = async (type, userId, friendId) => {
+  const res = await fetch("http://localhost:5000/auth/friends/handle", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      userId: userId,
+      friendId: friendId,
+      type: type,
+    }),
+  });
+
+  if (!res.ok) {
+    return { success: false, data: null };
+  }
+
+  const data = await res.json();
+  return { success: true, data: data };
+};

@@ -5,6 +5,7 @@ import Spinner from "./Spinner";
 import Error from "./Error";
 import useFriends from "../hooks/useFriends";
 import AddFriendForm from "./AddFriendForm";
+import { handleFriendRequests } from "../services/users-services";
 
 function FriendList() {
   const { user } = useContext(AuthContext);
@@ -15,23 +16,16 @@ function FriendList() {
   } | null>(null);
 
   const handleFriendRequest = async (type: string, friendId: string) => {
-    const res = await fetch("http://localhost:5000/auth/friends/handle", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: user.id,
-        friendId: friendId,
-        type: type,
-      }),
-    });
+    const { success, data } = await handleFriendRequests(
+      type,
+      user.id,
+      friendId
+    );
 
-    if (!res.ok) {
+    if (!success) {
       return;
     }
 
-    const data = await res.json();
     if (type === "accept") {
       setFriends({
         friends: [...friends.friends, data.friends],
