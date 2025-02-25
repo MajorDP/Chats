@@ -7,5 +7,6 @@ router.post("/login", userController.login);
 router.post("/register", userController.register);
 router.get("/friends/:uid", userController.getFriends);
 router.patch("/friends/add", userController.sendFriendRequest);
+router.patch("/friends/handle", userController.acceptRejectFriendRequest);
 
 module.exports = router;

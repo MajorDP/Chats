@@ -8,11 +8,44 @@ import AddFriendForm from "./AddFriendForm";
 
 function FriendList() {
   const { user } = useContext(AuthContext);
-  const { friends, error, isLoading } = useFriends(user.id);
+  const { friends, error, isLoading, setFriends } = useFriends(user.id);
   const [selectedFriend, setSelectedFriend] = useState<{
     id: string;
     username: string;
   } | null>(null);
+
+  const handleFriendRequest = async (type: string, friendId: string) => {
+    const res = await fetch("http://localhost:5000/auth/friends/handle", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: user.id,
+        friendId: friendId,
+        type: type,
+      }),
+    });
+
+    if (!res.ok) {
+      return;
+    }
+
+    const data = await res.json();
+    if (type === "accept") {
+      setFriends({
+        friends: [...friends.friends, data.friends],
+        requests: data.requests,
+      });
+    }
+
+    if (type === "reject") {
+      setFriends({
+        friends: [...friends.friends],
+        requests: data.requests,
+      });
+    }
+  };
 
   return (
     <>
@@ -25,15 +58,55 @@ function FriendList() {
       )}
       <div className="w-[15rem] m-auto h-fit bg-gradient-to-b from-gray-900 to-blue-950 rounded-xl border border-blue-900 mt-2">
         <AddFriendForm id={user.id as string} />
-        <h2 className="text-center py-2 font-semilight">Friends</h2>
+        <div className="my-4">
+          <h2 className="text-center font-semilight">Requests</h2>
+          {!isLoading && friends && (
+            <ul>
+              {friends.requests.map((req) => (
+                <li
+                  className="flex flex-row justify-around p-2 mb-2 gap-1"
+                  key={req.id}
+                >
+                  <div className="w-[20%]">
+                    <img
+                      src={req.img}
+                      className="w-full rounded-full"
+                      alt={req.username}
+                    />
+                  </div>
+                  <div className="flex justify-around flex-col text-sm w-[40%]">
+                    <div className="flex flex-row justify-between">
+                      <p className="truncate text-xs">{req.username}</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-row justify-between w-16 items-center">
+                    <button
+                      className="text-green-700 cursor-pointer bg-green-300 text-xs px-2 py-1 h-fit rounded-full"
+                      onClick={() => handleFriendRequest("accept", req.id)}
+                    >
+                      ✔
+                    </button>
+                    <button
+                      className="text-red-700 cursor-pointer bg-red-300 text-xs px-2 py-1 h-fit rounded-full"
+                      onClick={() => handleFriendRequest("reject", req.id)}
+                    >
+                      ✖
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <h2 className="text-center font-semilight">Friends</h2>
 
         {error && <Error error={error} />}
 
         {isLoading ? (
           <Spinner />
-        ) : friends.length > 0 ? (
+        ) : friends && friends.friends.length > 0 ? (
           <ul>
-            {friends.map((friend) => (
+            {friends.friends.map((friend) => (
               <li
                 className="flex flex-row justify-around p-2 mb-2 gap-1"
                 key={friend.id}

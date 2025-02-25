@@ -2,12 +2,28 @@ import { useEffect, useState } from "react";
 import { getFriends } from "../services/users-services";
 
 interface IFriends {
-  id: string;
-  img: string;
-  username: string;
+  friends:
+    | Array<{
+        id: string;
+        img: string;
+        username: string;
+      }>
+    | [];
+  requests:
+    | Array<{
+        id: string;
+        img: string;
+        username: string;
+      }>
+    | [];
 }
 function useFriends(id: string | null) {
-  const [friends, setFriends] = useState<IFriends[]>([]);
+  const [friends, setFriends] = useState<
+    IFriends | { friends: []; requests: [] }
+  >({
+    friends: [],
+    requests: [],
+  });
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -33,7 +49,7 @@ function useFriends(id: string | null) {
 
     getUserFriends();
   }, [id]);
-  return { friends, error, isLoading };
+  return { friends, error, isLoading, setFriends };
 }
 
 export default useFriends;

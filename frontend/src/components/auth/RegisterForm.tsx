@@ -90,7 +90,7 @@ function RegisterForm({ setIsLogin }: IRegisterForm) {
 
       <button
         type="submit"
-        className="mt-5 border px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 disabled:bg-gray-800"
+        className="mt-5 border px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 disabled:bg-gray-800 cursor-pointer"
         disabled={!isFormValid}
       >
         Sign Up

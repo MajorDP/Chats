@@ -72,17 +72,21 @@ const getFriends = async (req, res, next) => {
   let existingUser;
 
   try {
-    existingUser = await User.findById(uid, "friends").populate(
-      "friends",
-      "username img"
-    );
+    existingUser = await User.findById(uid, "friends requests")
+      .populate("friends", "username img")
+      .populate("requests", "username img");
   } catch (error) {
     return next(new HttpError("Sign in failed, please try again later.", 500));
   }
 
-  res.json(
-    existingUser.friends.map((friend) => friend.toObject({ getters: true }))
-  );
+  res.json({
+    friends: existingUser.friends.map((friend) =>
+      friend.toObject({ getters: true })
+    ),
+    requests: existingUser.requests.map((request) =>
+      request.toObject({ getters: true })
+    ),
+  });
 };
 
 const sendFriendRequest = async (req, res, next) => {
@@ -119,7 +123,61 @@ const sendFriendRequest = async (req, res, next) => {
   res.json({ message: "Request sent" });
 };
 
+const acceptRejectFriendRequest = async (req, res, next) => {
+  const { userId, friendId, type } = req.body;
+
+  let currentUser;
+  let friend;
+
+  try {
+    currentUser = await User.findById(userId);
+    friend = await User.findById(friendId);
+  } catch (error) {
+    return next(new HttpError("Could not find user.", 500));
+  }
+
+  if (type === "accept") {
+    currentUser.friends.push(friendId);
+    friend.friends.push(userId);
+    currentUser.requests = currentUser.requests.filter(
+      (request) => request.toString() !== friendId
+    );
+
+    try {
+      await currentUser.save();
+      await friend.save();
+    } catch (error) {
+      return next(new HttpError("Could not add friend.", 500));
+    }
+    res.json({
+      friends: {
+        id: friend.id.toString(),
+        username: friend.username,
+        img: friend.img,
+      },
+      requests: currentUser.requests.map((request) => request.toString()),
+    });
+  }
+
+  if (type === "reject") {
+    currentUser.requests = currentUser.requests.filter(
+      (request) => request.toString() !== friendId
+    );
+    try {
+      await currentUser.save();
+      await friend.save();
+    } catch (error) {
+      return next(new HttpError("Could not reject request.", 500));
+    }
+    res.json({
+      friends: null,
+      requests: currentUser.requests.map((request) => request.toString()),
+    });
+  }
+};
+
 exports.login = login;
 exports.register = register;
 exports.getFriends = getFriends;
 exports.sendFriendRequest = sendFriendRequest;
+exports.acceptRejectFriendRequest = acceptRejectFriendRequest;
