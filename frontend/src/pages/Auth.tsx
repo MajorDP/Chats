@@ -10,7 +10,7 @@ function Auth() {
       <div className={`${!isLogin ? "flex" : "hidden"} w-full`}>
         <RegisterForm setIsLogin={setIsLogin} />
       </div>
-      <div className={`${isLogin ? "flex" : "hidden"} w-full`}>
+      <div className={`${isLogin ? "flex" : "hidden"} w-full sm:items-center`}>
         <LoginForm setIsLogin={setIsLogin} />
       </div>
     </div>

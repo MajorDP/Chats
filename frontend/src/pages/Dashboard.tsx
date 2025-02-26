@@ -3,9 +3,12 @@ import PostsList from "../components/PostsList";
 import Spinner from "../components/Spinner";
 import usePosts from "../hooks/usePosts";
 import Error from "../components/Error";
+import { useContext } from "react";
+import { AuthContext } from "../context/UserContext";
 
 function Dashboard() {
-  const { posts, error, isLoading, setPosts } = usePosts();
+  const { user } = useContext(AuthContext);
+  const { posts, error, isLoading, setPosts } = usePosts("friends", user.id);
 
   return (
     <div className="w-full overflow-hidden flex flex-row rounded-xl">

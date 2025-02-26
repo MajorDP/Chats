@@ -28,6 +28,7 @@ function PostSmall({ post, setPosts }: IPostItem) {
             currPost.id === post.id ? data.post : currPost
           ) || []
       );
+      console.log(data);
       updateUser(data.user);
       setError(null);
     }

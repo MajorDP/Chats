@@ -5,6 +5,7 @@ const User = require("../models/user");
 
 const getPosts = async (req, res, next) => {
   let posts;
+  const { sortValue, uid } = req.query;
 
   try {
     posts = await Post.find()
@@ -13,6 +14,46 @@ const getPosts = async (req, res, next) => {
   } catch (error) {
     return next(new HttpError("Couldn't get posts.", 500));
   }
+
+  //if sortValue === all, we are in Explore page => show most popular posts first
+  if (sortValue === "all") {
+    posts = posts.sort((a, b) => {
+      const aPopularity = a.likes + a.comments.length;
+      const bPopularity = b.likes + b.comments.length;
+
+      return bPopularity - aPopularity;
+    });
+  }
+
+  //if sortValue === friends, we are in Dashboard page => friends posts first, then show most popular posts
+  if (sortValue === "friends") {
+    let currentUser;
+
+    try {
+      currentUser = await User.findById(uid);
+    } catch (error) {
+      return next(new HttpError("Couldn't get posts.", 500));
+    }
+
+    posts = posts.sort((a, b) => {
+      const aPopularity = a.likes + a.comments.length;
+      const bPopularity = b.likes + b.comments.length;
+
+      const aIsFriend = currentUser.friends.includes(a.user.id.toString());
+      const bIsFriend = currentUser.friends.includes(b.user.id.toString());
+
+      if (aIsFriend && !bIsFriend) {
+        return -1;
+      }
+
+      if (!aIsFriend && bIsFriend) {
+        return 1;
+      }
+
+      return bPopularity - aPopularity;
+    });
+  }
+
   res.json(posts.map((post) => post.toObject({ getters: true })));
 };
 
@@ -44,7 +85,7 @@ const likePost = async (req, res, next) => {
     post = await Post.findById(postId)
       .populate("user", "username img")
       .populate("comments.user", "username img");
-    user = await User.findById(userId, "-password -img");
+    user = await User.findById(userId, "-password");
   } catch (error) {
     return next(new HttpError("Couldn't find post or user.", 500));
   }
@@ -78,6 +119,7 @@ const likePost = async (req, res, next) => {
   const userResponse = {
     id: user.id,
     username: user.username,
+    img: user.img,
     email: user.email,
     votes: user.votes,
   };
@@ -133,6 +175,7 @@ const dislikePost = async (req, res, next) => {
   const userResponse = {
     id: user.id,
     username: user.username,
+    img: user.img,
     email: user.email,
     votes: user.votes,
   };

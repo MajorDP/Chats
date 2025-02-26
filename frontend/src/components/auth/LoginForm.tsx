@@ -18,7 +18,7 @@ function LoginForm({ setIsLogin }: ILoginForm) {
 
   return (
     <form
-      className="w-full flex flex-col items-center mt-20 text-xs sm:text-base"
+      className="w-full flex flex-col items-center mt-20 sm:mt-0 text-xs sm:text-base"
       onSubmit={handleSubmit}
     >
       <h2 className="text-center mt-4 text-xl font-semibold">Sign In</h2>

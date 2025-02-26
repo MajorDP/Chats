@@ -8,14 +8,14 @@ import { IPosts } from "../interfaces/posts";
 //   error: string | null;
 //   isLoading: boolean;
 // }
-function usePosts() {
+function usePosts(sortValue: string, userId: string | null = null) {
   const [postsData, setPostsData] = useState<IPosts[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPosts() {
-      const { data, error } = await getPosts();
+      const { data, error } = await getPosts(sortValue, userId);
       if (data) {
         setPostsData(data);
       }

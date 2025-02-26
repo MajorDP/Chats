@@ -34,8 +34,12 @@ export const postComment = async (uid, pid, comment) => {
   return { data: data, error: null };
 };
 
-export const getPosts = async () => {
-  const res = await fetch("http://localhost:5000/posts");
+export const getPosts = async (sortValue, userId) => {
+  const res = await fetch(
+    `http://localhost:5000/posts/?sortValue=${sortValue}${
+      sortValue === "friends" ? `&uid=${userId}` : ""
+    }`
+  );
 
   if (!res.ok) {
     const errorData = await res.json();
