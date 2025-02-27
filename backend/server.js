@@ -4,6 +4,7 @@ const cors = require("cors");
 const postRoutes = require("./routes/post-routes");
 const userRoutes = require("./routes/user-routes");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
 
@@ -22,12 +23,10 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(
-    "mongodb+srv://pavel:7539518462@socialmedia.nzv9q.mongodb.net/?retryWrites=true&w=majority&appName=socialMedia"
-  )
+  .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log("yes");
-    app.listen(5000);
+    console.log("Connected to DB successfully");
+    app.listen(process.env.PORT);
   })
   .catch((err) => {
     console.log("no");
