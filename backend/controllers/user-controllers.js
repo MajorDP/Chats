@@ -1,5 +1,6 @@
 const HttpError = require("../models/httpError");
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -12,7 +13,9 @@ const login = async (req, res, next) => {
     return next(new HttpError("Sign in failed, please try again later.", 500));
   }
 
-  if (!existingUser || existingUser.password !== password) {
+  const isMatch = await bcrypt.compare(password, existingUser.password);
+
+  if (!existingUser || !isMatch) {
     return next(new HttpError("Invalid credentials", 422));
   }
   console.log(existingUser.friends);
@@ -45,9 +48,11 @@ const register = async (req, res, next) => {
     return next(new HttpError("User with this email already exists.", 422));
   }
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   const createdUser = new User({
     email,
-    password,
+    password: hashedPassword,
     username,
   });
 
